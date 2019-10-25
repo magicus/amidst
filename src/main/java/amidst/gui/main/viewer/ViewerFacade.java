@@ -143,6 +143,11 @@ public class ViewerFacade {
 	}
 
 	@CalledOnlyBy(AmidstThread.EDT)
+	public WorldIcon getSelectedWorldIcon() {
+		return worldIconSelection.get();
+	}
+
+	@CalledOnlyBy(AmidstThread.EDT)
 	public WorldSeed getWorldSeed() {
 		return world.getWorldSeed();
 	}

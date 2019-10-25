@@ -92,6 +92,7 @@ public class PerMainWindowInjector {
 		this.actions = new Actions(
 				application,
 				dialogs,
+				this::getMenuBar,
 				worldSwitcher,
 				seedSearcherWindow,
 				viewerFacadeReference::get,

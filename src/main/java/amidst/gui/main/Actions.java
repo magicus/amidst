@@ -17,6 +17,7 @@ import amidst.documentation.AmidstThread;
 import amidst.documentation.CalledOnlyBy;
 import amidst.documentation.NotThreadSafe;
 import amidst.gui.crash.CrashWindow;
+import amidst.gui.main.menu.AmidstMenu;
 import amidst.gui.main.menu.MovePlayerPopupMenu;
 import amidst.gui.main.viewer.ViewerFacade;
 import amidst.gui.seedsearcher.SeedSearcherWindow;
@@ -36,6 +37,7 @@ import amidst.util.FileExtensionChecker;
 public class Actions {
 	private final Application application;
 	private final MainWindowDialogs dialogs;
+	Supplier<AmidstMenu> menuBarSupplier;
 	private final WorldSwitcher worldSwitcher;
 	private final SeedSearcherWindow seedSearcherWindow;
 	private final Supplier<ViewerFacade> viewerFacadeSupplier;
@@ -45,12 +47,14 @@ public class Actions {
 	public Actions(
 			Application application,
 			MainWindowDialogs dialogs,
+			Supplier<AmidstMenu> menuBarSupplier,
 			WorldSwitcher worldSwitcher,
 			SeedSearcherWindow seedSearcherWindow,
 			Supplier<ViewerFacade> viewerFacadeSupplier,
 			BiomeProfileSelection biomeProfileSelection) {
 		this.application = application;
 		this.dialogs = dialogs;
+		this.menuBarSupplier = menuBarSupplier;
 		this.worldSwitcher = worldSwitcher;
 		this.seedSearcherWindow = seedSearcherWindow;
 		this.viewerFacadeSupplier = viewerFacadeSupplier;
@@ -212,6 +216,20 @@ public class Actions {
 	}
 
 	@CalledOnlyBy(AmidstThread.EDT)
+	public void copyCoordinates() {
+		ViewerFacade viewerFacade = viewerFacadeSupplier.get();
+		if (viewerFacade != null) {
+			WorldIcon worldIcon = viewerFacade.getSelectedWorldIcon();
+			if (worldIcon != null) {
+				CoordinatesInWorld coordinates = worldIcon.getCoordinates();
+				String coordinateString = coordinates.getX() + ", " + coordinates.getY();
+				StringSelection selection = new StringSelection(coordinateString);
+				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, selection);
+			}
+		}
+	}
+
+	@CalledOnlyBy(AmidstThread.EDT)
 	public void takeScreenshot() {
 		ViewerFacade viewerFacade = viewerFacadeSupplier.get();
 		if (viewerFacade != null) {
@@ -295,6 +313,7 @@ public class Actions {
 		ViewerFacade viewerFacade = viewerFacadeSupplier.get();
 		if (viewerFacade != null) {
 			viewerFacade.selectWorldIcon(worldIcon);
+			menuBarSupplier.get().setCopyAvailable(worldIcon != null);
 		}
 	}
 

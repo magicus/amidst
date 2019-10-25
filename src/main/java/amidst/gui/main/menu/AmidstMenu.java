@@ -17,6 +17,7 @@ public class AmidstMenu {
 	private final JMenu worldMenu;
 	private final JMenuItem savePlayerLocationsMenu;
 	private final JMenuItem reloadPlayerLocationsMenu;
+	private final JMenuItem copyCoordinatesMenu;
 	private final LayersMenu layersMenu;
 
 	@CalledOnlyBy(AmidstThread.EDT)
@@ -26,12 +27,14 @@ public class AmidstMenu {
 			JMenu worldMenu,
 			JMenuItem savePlayerLocationsMenu,
 			JMenuItem reloadPlayerLocationsMenu,
+			JMenuItem copyCoordinatesMenu,
 			LayersMenu layersMenu) {
 		this.menuBar = menuBar;
 		this.exportMenu = exportMenu;
 		this.worldMenu = worldMenu;
 		this.savePlayerLocationsMenu = savePlayerLocationsMenu;
 		this.reloadPlayerLocationsMenu = reloadPlayerLocationsMenu;
+		this.copyCoordinatesMenu = copyCoordinatesMenu;
 		this.layersMenu = layersMenu;
 	}
 
@@ -60,5 +63,9 @@ public class AmidstMenu {
 		savePlayerLocationsMenu.setEnabled(false);
 		reloadPlayerLocationsMenu.setEnabled(false);
 		layersMenu.disable();
+	}
+
+	public void setCopyAvailable(boolean enabled) {
+		copyCoordinatesMenu.setEnabled(enabled);
 	}
 }

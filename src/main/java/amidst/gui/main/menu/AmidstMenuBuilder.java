@@ -21,6 +21,7 @@ public class AmidstMenuBuilder {
 	private final JMenuBar menuBar;
 	private JMenuItem exportMenu;
 	private JMenu worldMenu;
+	private JMenuItem copyCoordinatesMenu;
 	private JMenuItem savePlayerLocationsMenu;
 	private JMenuItem reloadPlayerLocationsMenu;
 	private LayersMenu layersMenu;
@@ -39,12 +40,14 @@ public class AmidstMenuBuilder {
 				worldMenu,
 				savePlayerLocationsMenu,
 				reloadPlayerLocationsMenu,
+				copyCoordinatesMenu,
 				layersMenu);
 	}
 
 	private JMenuBar createMenuBar() {
 		JMenuBar result = new JMenuBar();
 		result.add(create_File());
+		result.add(create_Edit());
 		worldMenu = result.add(create_World());
 		result.add(create_Layers());
 		result.add(create_Settings());
@@ -75,6 +78,18 @@ public class AmidstMenuBuilder {
 		return result;
 	}
 
+	private JMenu create_Edit() {
+		JMenu result = new JMenu("Edit");
+		result.setMnemonic(KeyEvent.VK_E);
+		// @formatter:off
+		Menus.item(result, actions::copySeedToClipboard,   "Copy Seed",                 KeyEvent.VK_B, MenuShortcuts.COPY_SEED_TO_CLIPBOARD);
+		copyCoordinatesMenu =
+		Menus.item(result, actions::copyCoordinates,       "Copy Selected Coordinates", KeyEvent.VK_C);
+		copyCoordinatesMenu.setEnabled(false);
+		// @formatter:on
+		return result;
+	}
+
 	private JMenu create_World() {
 		JMenu result = new JMenu("World");
 		result.setEnabled(false);
@@ -96,7 +111,6 @@ public class AmidstMenuBuilder {
 		reloadPlayerLocationsMenu.setEnabled(false);
 		Menus.item(result, actions::howCanIMoveAPlayer,    "How can I move a player?", KeyEvent.VK_M);
 		result.addSeparator();
-		Menus.item(result, actions::copySeedToClipboard,   "Copy Seed to Clipboard",   KeyEvent.VK_B, MenuShortcuts.COPY_SEED_TO_CLIPBOARD);
 		Menus.item(result, actions::takeScreenshot,        "Take Screenshot ...",      KeyEvent.VK_T, MenuShortcuts.TAKE_SCREENSHOT);
 		// @formatter:on
 		return result;
